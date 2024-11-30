@@ -1,2 +1,2 @@
 # PathExtractor/__init__.py
-from .PathExtractor import *
+from PathExtractor import *

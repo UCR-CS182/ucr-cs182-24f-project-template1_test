@@ -4,6 +4,12 @@ import re
 
 BLANK_WORD = "BLANK"
 
+class MethodContents:
+  def __init__(self, leaves: List[Node], method_name: str, method_length: int):
+    self.leaves = leaves
+    self.method_name = method_name
+    self.method_length = method_length # line of code without comments and empty lines
+
 class NodeDataManager:
   def __init__(self) -> None:
     self.node_data = {}

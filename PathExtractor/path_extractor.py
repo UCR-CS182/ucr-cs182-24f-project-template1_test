@@ -4,6 +4,8 @@ from .common import MethodContents
 from .ast_path import AstPath
 from .common import NodeDataManager
 from . import common
+from .ast_path_set import AstPathSet
+from .function_visitor import FunctionVisitor
 
 from tree_sitter import Language, Parser, Node
 import tree_sitter_python as tspython
@@ -31,6 +33,65 @@ class PathExtractor():
 
   def __init__(self):
     self.parser = Parser(JAVA_LANGUAGE)
+
+  
+  def extract_paths(self, code: str) -> List[AstPathSet]:
+    
+    # Parse and get AST
+    root_node = self.__parse_file(code)
+    
+    # Get all functions of the code 
+    function_visitor = FunctionVisitor()
+    function_visitor.visit(root_node)
+    methods = function_visitor.get_methods()
+
+    # for each function, extract AST paths
+    methods_paths = self.extract_methods_paths(methods)
+
+    return methods_paths
+  
+
+  def __parse_file(self, code):
+    tree = self.parser.parse(bytes(code, "utf8"))
+    return tree.root_node
+
+
+  def extract_methods_paths(self, methods: List[MethodContents]) -> List[AstPathSet]:
+
+    methods_paths = []
+
+    for m in methods:
+      if m.method_length < MinCodeLen or m.method_length > MaxCodeLen:
+        # TODO: Skip the method if the method length is less than MinCodeLen or greater than MaxCodeLen
+        # Your Code here
+        pass
+
+      paths_of_m = self.extract_single_method_paths(m)
+      if not paths_of_m.is_empty():
+        # TODO: Append the paths of the method to the methods_paths list
+        # Your Code here
+        pass
+
+    return methods_paths
+  
+
+  def extract_single_method_paths(self, method: MethodContents) -> AstPathSet:
+    leaves = method.leaves
+    ast_paths = AstPathSet(method.method_name)
+
+    for i in range(len(leaves)):
+      for j in range(i+1, len(leaves)):
+        path = ''
+        # TODO: Use extract_path method to extract the path between the leaves[i] and leaves[j] and add it to the ast_paths
+        # Use global PathSeparator as the input to the extract_path method
+        # Your Code here
+        pass
+        if path:
+          # TODO: Append the path to the ast_paths
+          # Your Code here
+          pass
+
+    return ast_paths
 
   
   def extract_path(self, source: Node, target: Node, separator: str) -> str:
@@ -64,7 +125,7 @@ class PathExtractor():
       src_child_id = ''
       # TODO: For each node in the source stack, get the child id if the node is a leaf node or a node of type in ParentTypeToAddChildId
       # At the same time, saturate the child id to MaxChildId if it exceeds the limit (using the __saturate_id method implemented below)
-      if i == 0 or source_stack[i].parent in ParentTypeToAddChildId:  
+      if i == 0 or source_stack[i].parent.type in ParentTypeToAddChildId:  
         # Your Code here
         pass
       # Construct the source half of the path with the abstract type and the child id
