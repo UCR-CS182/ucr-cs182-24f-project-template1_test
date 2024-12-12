@@ -36,7 +36,7 @@ jobs:
       with:
         repository: UCR-CS182/RefPathExtractor
         path: RefPathExtractor
-        token: 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
+        token: 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
           
       
     - name: Setup Python
