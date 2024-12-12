@@ -15,3 +15,4 @@ class AstPathSet:
   def add_path(self, source, target, path: str):
     new_path = AstPath(source, target, path)
     # TODO: Append the new_path to self.paths
+
