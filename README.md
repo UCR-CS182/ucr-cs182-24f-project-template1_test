@@ -45,3 +45,5 @@ or
 ```bash
 pytest tests/
 ```
+
+update workflow
